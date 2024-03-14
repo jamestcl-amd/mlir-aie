@@ -503,6 +503,8 @@ for(int i = 0; i < 8 /*size_2*/; i++)
 <tr><td><code>offset</code></td><td>::mlir::IntegerAttr</td><td>32-bit signless integer attribute</td></tr>
 <tr><td><code>len</code></td><td>::mlir::IntegerAttr</td><td>32-bit signless integer attribute</td></tr>
 <tr><td><code>dimensions</code></td><td>::xilinx::AIE::BDDimLayoutArrayAttr</td><td></td></tr>
+<tr><td><code>bd_id</code></td><td>::mlir::IntegerAttr</td><td>32-bit signless integer attribute</td></tr>
+<tr><td><code>next_bd_id</code></td><td>::mlir::IntegerAttr</td><td>32-bit signless integer attribute</td></tr>
 </table>
 
 #### Operands:
@@ -1527,6 +1529,7 @@ Traits: `SingleBlockImplicitTerminator<EndOp>`, `SingleBlock`
 <table>
 <tr><th>Attribute</th><th>MLIR Type</th><th>Description</th></tr>
 <tr><td><code>ID</code></td><td>::mlir::IntegerAttr</td><td>8-bit signless integer attribute</td></tr>
+<tr><td><code>keep_pkt_header</code></td><td>::mlir::BoolAttr</td><td>bool attribute</td></tr>
 </table>
 
 
