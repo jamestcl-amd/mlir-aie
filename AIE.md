@@ -92,6 +92,7 @@ Interfaces: `OpAsmOpInterface`, `TileElement`
 <tr><td><code>sym_name</code></td><td>::mlir::StringAttr</td><td>string attribute</td></tr>
 <tr><td><code>address</code></td><td>::mlir::IntegerAttr</td><td>32-bit signless integer attribute</td></tr>
 <tr><td><code>initial_value</code></td><td>::mlir::ElementsAttr</td><td>constant vector/tensor attribute</td></tr>
+<tr><td><code>mem_bank</code></td><td>::mlir::IntegerAttr</td><td>32-bit signless integer attribute</td></tr>
 </table>
 
 #### Operands:
@@ -370,7 +371,7 @@ Interfaces: `AIETarget`
 * xcvc1902 (`xcvc1902`)
 * xcve2302 (`xcve2302`)
 * xcve2802 (`xcve2802`)
-* ipu (`ipu`){{% /markdown %}}</details></td></tr>
+* npu (`npu`){{% /markdown %}}</details></td></tr>
 </table>
 
 
@@ -2009,7 +2010,11 @@ to it.
 Note that row 0 of the Tile array is different from other rows, since it models the shim interface between
 the AIE array proper and the PL.  The South-West/Lower Right most core exists in Tile(0,1)
 
-Interfaces: `FlowEndPoint`, `InferTypeOpInterface`, `OpAsmOpInterface`
+Traits: `AlwaysSpeculatableImplTrait`
+
+Interfaces: `ConditionallySpeculatable`, `FlowEndPoint`, `InferTypeOpInterface`, `NoMemoryEffect (MemoryEffectOpInterface)`, `OpAsmOpInterface`
+
+Effects: `MemoryEffects::Effect{}`
 
 #### Attributes:
 
