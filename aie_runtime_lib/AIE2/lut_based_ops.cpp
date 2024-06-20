@@ -11,6 +11,7 @@
 // Lookup table based operations
 //===----------------------------------------------------------------------===//
 
+#include "lut_based_ops.h"
 #include "aie_api/aie.hpp"
 
 // The tables _ab and _cd are copies of each other
@@ -361,3 +362,44 @@ float chess_storage(% chess_alignof(v32int8)) tanh_lut_cd[128] = {
     0.00283813476562500000000000000000, 0.98828125000000000000000000000000,
     0.00000000000000000000000000000000, 1.00000000000000000000000000000000,
 };
+
+// __attribute__((always_inline)) v16accfloat getExpBf16(v16bfloat16 x) {
+v16accfloat getExpBf16(bfloat16 *x) {
+  bfloat16 __aie_dm_resource_a *ilut_ab =
+      (bfloat16 __aie_dm_resource_a *)exp_ilut_ab;
+  bfloat16 __aie_dm_resource_b *ilut_cd =
+      (bfloat16 __aie_dm_resource_b *)exp_ilut_cd;
+  bfloat16 __aie_dm_resource_a *flut_ab =
+      (bfloat16 __aie_dm_resource_a *)exp_flut_ab;
+  bfloat16 __aie_dm_resource_b *flut_cd =
+      (bfloat16 __aie_dm_resource_b *)exp_flut_cd;
+
+  using lut_type = aie::lut<4, bfloat16, bfloat16>;
+  const int LUT_elems = 256;
+  const int step_i = 8;
+  const int step_f = 0;
+
+  lut_type lut_i(LUT_elems, ilut_ab, ilut_cd);
+  lut_type lut_f(LUT_elems, flut_ab, flut_cd);
+  aie::parallel_lookup<uint16, lut_type, aie::lut_oor_policy::truncate>
+      lookup_i(lut_i, step_i);
+  aie::parallel_lookup<uint16, lut_type, aie::lut_oor_policy::truncate>
+      lookup_f(lut_f, step_f);
+
+  aie::vector<bfloat16, 16> I_val_vec, F_val_vec;
+  aie::accum<accfloat, 16> exp_val;
+  //   aie::vector<bfloat16, 16> input_bf16 = x;
+  aie::vector<bfloat16, 16> input_bf16 = *(v16bfloat16 *)x;
+
+  // position of output decimal point = 8, making input become 8 bits, and for
+  // LUT_elems = 256 lookup. aie::vector<int16, 16>
+  // input=aie::to_fixed<int16>(input_bf16,8);
+  aie::vector<int16, 32> input0 = v32int16(bfloat16_to_int(input_bf16, 8));
+  aie::vector<int16, 16> input = aie::filter_even(input0);
+
+  I_val_vec = lookup_i.fetch(input.cast_to<uint16>());
+  F_val_vec = lookup_f.fetch(input.cast_to<uint16>());
+  exp_val = aie::mul(I_val_vec, F_val_vec);
+  return v16accfloat(exp_val);
+  //   return (accfloat *)&(v16accfloat(exp_val));
+}
