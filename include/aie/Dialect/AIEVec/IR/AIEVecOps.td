@@ -34,8 +34,11 @@ class AIEVec_Op<string mnemonic, list<Trait> traits = []> :
   let hasVerifier = 1;
 }
 
+class AIEVecAIE1_Op<string mnemonic, list<Trait> traits = []> :
+    AIEVec_Op</*opName =*/"aie1." # mnemonic, traits>;
+
 def AIEVec_AddOp:
-  AIEVec_Op<"add", [
+  AIEVecAIE1_Op<"add", [
     Pure
   ]>,
   Arguments<(ins AnyVector:$lhs, AnyVector:$rhs,
