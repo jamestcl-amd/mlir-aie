@@ -884,6 +884,25 @@ A route operation that routes one herd to another.
 | `destHerds` | index
 
 
+### `aiex.runtime_sequence` (::xilinx::AIEX::RuntimeSequenceOp)
+
+_Program the configuration co-processor of the AI Engine array_
+
+Instructions in this operation allow for runtime (re-)configuration of the AI Engine array, such as configuring data movement buffer descriptors.
+These instructions will execute on the configuration co-processor of the AI Engine array.
+
+Typically, these instructions include configuring the data transfers between host and AIE array on the shims.
+The input arguments are arguments passed in from the host at kernel invocation time. This may include buffers on the host.
+
+Traits: `HasParent<AIE::DeviceOp>`, `NoTerminator`
+
+#### Operands:
+
+| Operand | Description |
+| :-----: | ----------- |
+| `args` | variadic of any type
+
+
 ### `aiex.select` (::xilinx::AIEX::SelectOp)
 
 _A select operation_
@@ -990,4 +1009,112 @@ Similar to UseLockOp, this operation can be understood as "blocking" op.
 * Release (`Release`){{% /markdown %}}</details></td></tr>
 </table>
 
+
+## Enums
+
+### AIEArch
+
+AIE Architecture
+
+#### Cases:
+
+| Symbol | Value | String |
+| :----: | :---: | ------ |
+| AIE1 | `1` | AIE1 |
+| AIE2 | `2` | AIE2 |
+
+### AIEDevice
+
+AIE Device
+
+#### Cases:
+
+| Symbol | Value | String |
+| :----: | :---: | ------ |
+| xcvc1902 | `1` | xcvc1902 |
+| xcve2302 | `2` | xcve2302 |
+| xcve2802 | `3` | xcve2802 |
+| npu1 | `4` | npu1 |
+| npu1_1col | `5` | npu1_1col |
+| npu1_2col | `6` | npu1_2col |
+| npu1_3col | `7` | npu1_3col |
+| npu1_4col | `8` | npu1_4col |
+
+### CascadeDir
+
+Directions for cascade
+
+#### Cases:
+
+| Symbol | Value | String |
+| :----: | :---: | ------ |
+| South | `3` | South |
+| West | `4` | West |
+| North | `5` | North |
+| East | `6` | East |
+
+### DMAChannelDir
+
+DMA Channel direction
+
+#### Cases:
+
+| Symbol | Value | String |
+| :----: | :---: | ------ |
+| S2MM | `0` | S2MM |
+| MM2S | `1` | MM2S |
+
+### LockAction
+
+lock acquire/release
+
+#### Cases:
+
+| Symbol | Value | String |
+| :----: | :---: | ------ |
+| Acquire | `0` | Acquire |
+| AcquireGreaterEqual | `2` | AcquireGreaterEqual |
+| Release | `1` | Release |
+
+### LockBlocking
+
+lock operation is blocking
+
+#### Cases:
+
+| Symbol | Value | String |
+| :----: | :---: | ------ |
+| NonBlocking | `0` | NonBlocking |
+| Blocking | `1` | Blocking |
+
+### ObjectFifoPort
+
+Ports of an object FIFO
+
+#### Cases:
+
+| Symbol | Value | String |
+| :----: | :---: | ------ |
+| Produce | `0` | Produce |
+| Consume | `1` | Consume |
+
+### WireBundle
+
+Bundle of wires
+
+#### Cases:
+
+| Symbol | Value | String |
+| :----: | :---: | ------ |
+| Core | `0` | Core |
+| DMA | `1` | DMA |
+| FIFO | `2` | FIFO |
+| South | `3` | South |
+| West | `4` | West |
+| North | `5` | North |
+| East | `6` | East |
+| PLIO | `7` | PLIO |
+| NOC | `8` | NOC |
+| Trace | `9` | Trace |
+| Ctrl | `10` | Ctrl |
 
